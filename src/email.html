@@ -1,7 +1,10 @@
+<DOCTYPE !html>
+
 <html>
 <head>
 <title>Email Generator</title>
 <!--script type=text/javascript src=email.js /-->
+
 </head>
 <body>
 	<table>
@@ -89,6 +92,58 @@
 		<textarea id=txtarea_generated value=""></textarea>
 		</td>
 	</tr>
-	</table>	
+	</table>
+	
+<script type=text/javascript>
+	var generateEmail = function(){
+		//console.log("clicked");
+		var single_linebrk = document.querySelector("#txt_single_linebreak").value;
+		var double_linebrk = document.querySelector("#txt_double_linebreak").value;
+		var to = document.querySelector("#txt_to").value;
+		var from = document.querySelector("#txt_from").value;
+		var cc = document.querySelector("#txt_cc").value;
+		var bcc = document.querySelector("#txt_bcc").value;
+		var attachment = document.querySelector("#txt_attachment").value;
+		var subject = document.querySelector("#txt_subject").value;
+		var body = document.querySelector("#txtarea_body").value;
+		
+		var generated_textarea = document.querySelector("#txtarea_generated");
+		
+		var generated = "";
+		generated  = "string to = " + to + " ; \n";
+		generated += "string from = " + from + " ; \n";
+		generated += "string cc = " + cc + " ; \n";
+		generated += "string bcc = " + bcc + " ; \n";
+		generated += 'string attachment = System.Configuration.ConfigurationManager.AppSettings["Attachment Path Key"] + ' 
+						+ attachment + ' ; \n';
+		generated += "string subject = " + subject + " ; \n";
+		
+		//split the body by double line breaks and filter out empty lines
+		var body_lines = body.split("\n\n").filter(function(line){ return line.trim().length>0;});
+		var generated_body = "";
+		
+		//insert double line breaks after each line
+		for(var i=0; i<body_lines.length; ++i){
+			generated_body += body_lines[i] + double_linebrk;
+		}
+		
+		//split the body by single line breaks
+		var body_lines = generated_body.split("\n");
+		var generated_body = "";
+		
+		//insert single line breaks
+		for(var i=0; i<body_lines.length; ++i){
+			generated_body += body_lines[i] + single_linebrk;
+		}
+		
+		generated += "string body = " + generated_body + "\n";
+		
+		generated_textarea.value = generated;
+	}
+
+	var btn_generate = document.querySelector("#btn_generate");
+	btn_generate.addEventListener("click", generateEmail);
+		
+</script>	
 </body>
 </html>
