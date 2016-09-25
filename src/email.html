@@ -1,19 +1,38 @@
-<DOCTYPE !html>
+<!DOCTYPE html>
 
 <html>
 <head>
 <title>Email Generator</title>
-<!--script type=text/javascript src=email.js /-->
-
+<style type=text/css>
+	.hidden{
+		display: none;
+	}
+</style>
 </head>
 <body>
+	<div class=mode>
+		<label for=radio-simple>Simple Mode</label>
+		<input type=radio id=radio-simple name=mode value=simple checked >
+		<br>
+		<label for=radio-smart>Smart Mode</label>
+		<input type=radio id=radio-smart name=mode value=smart >
+	</div>
+	<div class=simple>	
+	<form name = simple id=simple-form onsubmit="return false">
 	<table>
-	<tr>
+	<tr>		
 		<td>
 		<label for=txt_single_linebreak>Line Break to Insert</label>
 		</td>
 		<td>
-		<input id=txt_single_linebreak value="</br>">
+		<input id=txt_single_linebreak value="</br>" required >
+		</td>
+		
+		<td>
+		<label for=txtarea_workspace>Workspace</label>
+		</td>
+		<td rowspan=10>
+		<textarea id=txtarea_workspace value="" placeholder="Instead of alt+tabbing to and from your word document, first copy paste your email here, then copy to the fields on the left" rows = 30 cols=50></textarea>
 		</td>
 	</tr>	
 	<tr>
@@ -21,7 +40,7 @@
 		<label for=txt_double_linebreak>Double Line Break to Insert</label>
 		</td>
 		<td>
-		<input id=txt_double_linebreak value="\n <br/></br>">
+		<input id=txt_double_linebreak value="\n <br/></br>" required>
 		</td>
 	</tr>
 	<tr>
@@ -29,14 +48,14 @@
 		<label for=txt_to>To</label>
 		</td>
 		<td>
-		<input id=txt_to placeholder="to email id" value="">
+		<input id=txt_to placeholder="to email id" value="" required>
 		</td>
 	</tr>
 		<td>
 		<label for=txt_from>From</label>
 		</td>
 		<td>
-		<input id=txt_from placeholder="from email id" value="">
+		<input id=txt_from placeholder="from email id" value="" required>
 		</td>
 	</tr>
 	<tr>
@@ -68,7 +87,7 @@
 		<label for=txt_subject>Subject</label>
 		</td>
 		<td>
-		<input id=txt_subject placeholder="Subject" value="">
+		<input id=txt_subject placeholder="Subject" value="" required>
 		</td>
 	</tr>
 	<tr>
@@ -76,12 +95,12 @@
 		<label for=txtarea_body>Body</label>
 		</td>
 		<td>
-		<textarea id=txtarea_body placeholder="body"></textarea>
+		<textarea id=txtarea_body placeholder="body" rows=10 cols=50></textarea>
 		</td>
 	<tr>
 		<td/>
 		<td>
-		<input type=button id=btn_generate value=Generate>
+		<input type=submit id=btn_generate value=Generate>
 		</td>
 	</tr>
 	<tr>
@@ -89,61 +108,51 @@
 		<label for=txtarea_generated>Generated Email</label>
 		</td>
 		<td>
-		<textarea id=txtarea_generated value=""></textarea>
+		<textarea id=txtarea_generated value="" rows = 30 cols=50></textarea>
 		</td>
 	</tr>
 	</table>
+	</form>
+	</div>
 	
-<script type=text/javascript>
-	var generateEmail = function(){
-		//console.log("clicked");
-		var single_linebrk = document.querySelector("#txt_single_linebreak").value;
-		var double_linebrk = document.querySelector("#txt_double_linebreak").value;
-		var to = document.querySelector("#txt_to").value;
-		var from = document.querySelector("#txt_from").value;
-		var cc = document.querySelector("#txt_cc").value;
-		var bcc = document.querySelector("#txt_bcc").value;
-		var attachment = document.querySelector("#txt_attachment").value;
-		var subject = document.querySelector("#txt_subject").value;
-		var body = document.querySelector("#txtarea_body").value;
-		
-		var generated_textarea = document.querySelector("#txtarea_generated");
-		
-		var generated = "";
-		generated  = "string to = " + to + " ; \n";
-		generated += "string from = " + from + " ; \n";
-		generated += "string cc = " + cc + " ; \n";
-		generated += "string bcc = " + bcc + " ; \n";
-		generated += 'string attachment = System.Configuration.ConfigurationManager.AppSettings["Attachment Path Key"] + ' 
-						+ attachment + ' ; \n';
-		generated += "string subject = " + subject + " ; \n";
-		
-		//split the body by double line breaks and filter out empty lines
-		var body_lines = body.split("\n\n").filter(function(line){ return line.trim().length>0;});
-		var generated_body = "";
-		
-		//insert double line breaks after each line
-		for(var i=0; i<body_lines.length; ++i){
-			generated_body += body_lines[i] + double_linebrk;
-		}
-		
-		//split the body by single line breaks
-		var body_lines = generated_body.split("\n");
-		var generated_body = "";
-		
-		//insert single line breaks
-		for(var i=0; i<body_lines.length; ++i){
-			generated_body += body_lines[i] + single_linebrk;
-		}
-		
-		generated += "string body = " + generated_body + "\n";
-		
-		generated_textarea.value = generated;
-	}
-
-	var btn_generate = document.querySelector("#btn_generate");
-	btn_generate.addEventListener("click", generateEmail);
-		
-</script>	
+	<div class="smart hidden">
+	<form name=smart id=smart-form onsubmit="return false">
+	<table>
+		<tr>
+			<td>
+			<label for=txt_double_linebreak_smart>Double Line Break to Insert</label>
+			</td>
+			<td>
+			<input id=txt_double_linebreak_smart value="\n <br/></br>">
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<label for=txtarea_body_smart>Body</label>
+			</td>
+			<td>
+			<textarea id=txtarea_body_smart placeholder = "Copy paste your email here"
+			
+			title="To: to@example.com \nFrom: from@example.com \ncc: cc@example.com \nbcc: bcc@example.com \nattachment: attachment file name \nsubject: message subject \nDear X \nI am missing you. \nYours Y"
+			rows = 30 cols=50></textarea>
+			</td>
+		<tr>
+			<td/>
+			<td>
+			<input type=submit id=btn_generate_smart value=Generate>
+			</td>
+			</tr>
+		<tr>
+			<td>
+			<label for=txtarea_generated_smart>Generated Email</label>
+			</td>
+			<td>
+			<textarea id=txtarea_generated_smart value="" rows = 30 cols=50></textarea>
+			</td>
+		</tr>
+	</table>
+	</form>
+	</div>
+	<script type=text/javascript src=email.js ></script>
 </body>
 </html>
