@@ -28,6 +28,21 @@ var smartCheckbox = document.querySelector("#radio-smart");
 simpleCheckbox.addEventListener("click", changeMode);
 smartCheckbox.addEventListener("click", changeMode);
 
+//automatic copy in new browsers
+var selectAndCopy = function(generatedEmailTextArea){
+	//select the generated text
+	generatedEmailTextArea.select();
+		
+	//this will work only in new browsers, if it doesn't work, then manually copy paste the generated email. Refer: http://stackoverflow.com/a/30810322/2061924
+	try {
+		var successful = document.execCommand('copy');
+		var msg = successful ? 'successful' : 'unsuccessful';
+		console.log('Copying text command was ' + msg);
+	}catch (err) {
+		console.log('Oops, unable to copy');
+	}
+}
+
 //simple email generator
 var generateEmail = function(){
 		//console.log("clicked");
@@ -73,6 +88,8 @@ var generateEmail = function(){
 		generated += "string body = \"" + generated_body + "\" ; \n";
 		
 		generated_textarea.value = generated;
+		
+		selectAndCopy(generated_textarea);
 }
 
 var btn_generate = document.querySelector("#btn_generate");
@@ -145,24 +162,11 @@ var generateEmailSmartly = function(){
 	
 	generated_email_textarea.value = generated;
 	
+	selectAndCopy(generated_email_textarea);
+	
+	
 }
 
 var btn_generate_smart = document.querySelector("#btn_generate_smart");
 btn_generate_smart.addEventListener("click", generateEmailSmartly);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
